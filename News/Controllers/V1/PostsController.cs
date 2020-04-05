@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using News.Contracts.V1;
 using News.Contracts.V1.Requests;
@@ -19,15 +19,15 @@ namespace News.Controllers.V1
         }
 
         [HttpGet(ApiRoutes.Posts.GetAll)]
-        public IActionResult getAll()
+        public async Task<IActionResult> getAll()
         {
-            return Ok(_postService.GetPosts());
+            return Ok(_postService.GetPostsAsync());
         }
 
         [HttpGet(ApiRoutes.Posts.Get)]
-        public IActionResult Get([FromRoute]Guid postId)
+        public async Task<IActionResult> Get([FromRoute]Guid postId)
         {
-            var post = _postService.GetPostById(postId);
+            var post = _postService.GetPostByIdAsync(postId);
 
             if (post == null)
                 return NotFound();
@@ -36,14 +36,14 @@ namespace News.Controllers.V1
         }
 
         [HttpPut(ApiRoutes.Posts.Update)]
-        public IActionResult Update([FromRoute]Guid postId, [FromBody] UpdatePostRequest request)
+        public async Task<IActionResult> Update([FromRoute]Guid postId, [FromBody] UpdatePostRequest request)
         {
             var post = new Post {
                 Id = postId,
                 Name = request.Name
             };
 
-            var updated = _postService.UpadatePost(post);
+            var updated = await _postService.UpadatePostAsync(post);
 
             if(updated)
                 return Ok(post);
@@ -52,9 +52,9 @@ namespace News.Controllers.V1
         }
 
         [HttpDelete(ApiRoutes.Posts.Delete)]
-        public IActionResult Delete([FromRoute]Guid postId)
+        public async Task<IActionResult> Delete([FromRoute]Guid postId)
         {
-            var deleted = _postService.DeletePost(postId);
+            var deleted = await _postService.DeletePostAsync(postId);
 
             if (deleted)
                 return NoContent();
@@ -64,14 +64,14 @@ namespace News.Controllers.V1
 
 
         [HttpPost(ApiRoutes.Posts.Create)]
-        public IActionResult Create([FromBody] CreatePostRequest postRequest)
+        public async Task<IActionResult> Create([FromBody] CreatePostRequest postRequest)
         {
-            var post = new Post { Id = postRequest.Id };
+            var post = new Post { Name = postRequest.Name };
 
             if (post.Id != Guid.Empty)
                 post.Id = Guid.NewGuid();
 
-            _postService.GetPosts().Add(post);
+            await _postService.CreatePostAsync(post);
 
             var baseUrl = $"{HttpContext.Request.Scheme}://{HttpContext.Request.Host.ToUriComponent()}";
             var locationUri = baseUrl + "/" + ApiRoutes.Posts.Get.Replace("{postId}", post.Id.ToString());
