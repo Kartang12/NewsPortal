@@ -1,11 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿
+
+using News.Domain;
+using System;
 using System.Threading.Tasks;
 
 namespace News.Services
 {
-    public class IIdentityService
+    public interface IIdentityService
     {
+        Task<AuthenticationResult> RegisterAsync(string email, string password);
     }
 }

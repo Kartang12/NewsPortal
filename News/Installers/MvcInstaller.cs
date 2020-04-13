@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Swashbuckle.AspNetCore.Swagger;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using News.Options;
@@ -8,6 +7,7 @@ using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using System.Collections.Generic;
 using Microsoft.OpenApi.Models;
+using News.Services;
 
 namespace News.Installers
 {
@@ -21,6 +21,8 @@ namespace News.Installers
             var jwtSettings = new JwtSettings();
             configuration.Bind(nameof(jwtSettings), jwtSettings);
             service.AddSingleton(jwtSettings);
+
+            service.AddScoped<IIdentityService, IdentityService>();
 
             service.AddAuthentication(x =>
             {
