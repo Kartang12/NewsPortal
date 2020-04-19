@@ -3,12 +3,12 @@ using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using FluentAssertions;
-using Tweetbook.Contracts.V1;
-using Tweetbook.Contracts.V1.Requests;
-using Tweetbook.Domain;
+using News.Contracts.V1;
+using News.Contracts.V1.Requests;
+using News.Domain;
 using Xunit;
 
-namespace Tweetbook.IntegrationTests
+namespace News.IntegrationTests
 {
     public class PostsControllerTests : IntegrationTest
     {

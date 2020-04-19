@@ -1,4 +1,4 @@
-namespace Tweetbook.Contracts.V1.Requests
+namespace News.Contracts.V1.Requests
 {
     public class UserLoginRequest
     {

@@ -2,10 +2,10 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Tweetbook.Data;
-using Tweetbook.Services;
+using News.Data;
+using News.Services;
 
-namespace Tweetbook.Installers
+namespace News.Installers
 {
     public class DbInstaller : IInstaller
     {

@@ -1,4 +1,4 @@
-﻿namespace Tweetbook.Contracts.V1
+﻿namespace News.Contracts.V1
 {
     public static class ApiRoutes
     {
@@ -28,6 +28,11 @@
             public const string Register = Base + "/identity/register";
             
             public const string Refresh = Base + "/identity/refresh";
+        }
+        
+        public static class Tags
+        {
+            public const string GetAll = Base + "/tags";
         }
     }
 }

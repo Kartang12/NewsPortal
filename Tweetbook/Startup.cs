@@ -3,10 +3,11 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Tweetbook.Installers;
-using SwaggerOptions = Tweetbook.Options.SwaggerOptions;
+using News.Options;
+using News.Installers;
+using SwaggerOptions = News.Options.SwaggerOptions;
 
-namespace Tweetbook
+namespace News
 {
     public class Startup
     {
@@ -40,7 +41,7 @@ namespace Tweetbook
 
             app.UseAuthentication();
             
-            var swaggerOptions = new SwaggerOptions();
+            var swaggerOptions = new Options.SwaggerOptions();
             Configuration.GetSection(nameof(SwaggerOptions)).Bind(swaggerOptions);
 
             app.UseSwagger(option => { option.RouteTemplate = swaggerOptions.JsonRoute; });

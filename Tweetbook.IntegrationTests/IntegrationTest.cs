@@ -6,12 +6,12 @@ using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
-using Tweetbook.Contracts.V1;
-using Tweetbook.Contracts.V1.Requests;
-using Tweetbook.Contracts.V1.Responses;
-using Tweetbook.Data;
+using News.Contracts.V1;
+using News.Contracts.V1.Requests;
+using News.Contracts.V1.Responses;
+using News.Data;
 
-namespace Tweetbook.IntegrationTests
+namespace News.IntegrationTests
 {
     public class IntegrationTest : IDisposable
     {

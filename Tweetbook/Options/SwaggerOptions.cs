@@ -1,4 +1,4 @@
-﻿namespace Tweetbook.Options
+﻿namespace News.Options
 {
     public class SwaggerOptions
     {

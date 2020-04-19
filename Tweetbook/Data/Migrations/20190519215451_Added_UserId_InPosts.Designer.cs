@@ -5,9 +5,9 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using Tweetbook.Data;
+using News.Data;
 
-namespace Tweetbook.Data.Migrations
+namespace News.Data.Migrations
 {
     [DbContext(typeof(DataContext))]
     [Migration("20190519215451_Added_UserId_InPosts")]

@@ -6,10 +6,10 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
-using Tweetbook.Options;
-using Tweetbook.Services;
+using News.Options;
+using News.Services;
 
-namespace Tweetbook.Installers
+namespace News.Installers
 {
     public class MvcInstaller : IInstaller
     {
@@ -46,10 +46,15 @@ namespace Tweetbook.Installers
                     x.SaveToken = true;
                     x.TokenValidationParameters = tokenValidationParameters;
                 });
+
+            services.AddAuthorization(options =>
+                {
+                    options.AddPolicy("TagViewer", builder => builder.RequireClaim("tags.view", "true"));   
+                });
             
             services.AddSwaggerGen(x =>
             {
-                x.SwaggerDoc("v1", new OpenApiInfo{ Title = "Tweetbook API", Version = "v1" });
+                x.SwaggerDoc("v1", new OpenApiInfo{ Title = "Nes API", Version = "v1" });
 
                 var security = new Dictionary<string, IEnumerable<string>>
                 {

@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Tweetbook.Domain;
+using News.Domain;
 
-namespace Tweetbook.Services
+namespace News.Services
 {
     public interface IPostService
     {
@@ -18,5 +18,7 @@ namespace Tweetbook.Services
         Task<bool> DeletePostAsync(Guid postId);
         
         Task<bool> UserOwnsPostAsync(Guid postId, string userId);
+        
+        Task<List<Tag>> GetAllTagsAsync();
     }
 }

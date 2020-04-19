@@ -1,7 +1,7 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace Tweetbook.Data.Migrations
+namespace News.Data.Migrations
 {
     public partial class Added_RefreshTokens : Migration
     {

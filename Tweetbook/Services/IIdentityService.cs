@@ -1,7 +1,7 @@
 using System.Threading.Tasks;
-using Tweetbook.Domain;
+using News.Domain;
 
-namespace Tweetbook.Services
+namespace News.Services
 {
     public interface IIdentityService
     {

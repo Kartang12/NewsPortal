@@ -1,7 +1,7 @@
 using System.Linq;
 using Microsoft.AspNetCore.Http;
 
-namespace Tweetbook.Extensions
+namespace News.Extensions
 {
     public static class GeneralExtensions
     {

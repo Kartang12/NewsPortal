@@ -3,9 +3,9 @@ using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
-using Tweetbook.Data;
+using News.Data;
 
-namespace Tweetbook
+namespace News
 {
     public class Program
     {
