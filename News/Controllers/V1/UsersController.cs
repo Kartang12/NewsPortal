@@ -27,7 +27,7 @@ namespace News.Controllers.V1
         [HttpGet(ApiRoutes.Users.Get)]
         public async Task<IActionResult> Get([FromRoute] string userName)
         {
-            return Ok(_identityService.GetUserByName(userName));
+            return Ok(await _identityService.GetUserByName(userName));
         }
         
         [HttpPost(ApiRoutes.Users.Add)]
@@ -35,10 +35,10 @@ namespace News.Controllers.V1
         {
             var registered = await _identityService.RegisterAsync(request.Email, request.Password, request.Role);
             
-            if(registered != null)
+            if(registered.Errors == null)
                 return Ok();
 
-            return BadRequest();
+            return BadRequest(registered.Errors);
         }        
         
         [HttpDelete(ApiRoutes.Users.Delete)]
