@@ -1,9 +1,12 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using News.Controllers.V1;
 using News.Data;
 
 namespace News
@@ -21,6 +24,7 @@ namespace News
                 await dbContext.Database.MigrateAsync();
 
                 var roleManager = serviceScope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
+                var userManager = serviceScope.ServiceProvider.GetRequiredService<UserManager<IdentityUser>>();
 
                 if (!await roleManager.RoleExistsAsync("Admin"))
                 {
@@ -33,8 +37,20 @@ namespace News
                     var adminRole = new IdentityRole("Poster");
                     await roleManager.CreateAsync(adminRole);
                 }
-            }
 
+                var adminExists = await userManager.GetUsersInRoleAsync("Admin");
+                if (adminExists.Count <= 0)
+                {
+                    var newUserId = Guid.NewGuid();
+                    var newUser = new IdentityUser
+                    {
+                        Id = newUserId.ToString(),
+                        UserName = "admin@example.com"
+                    };
+                    await userManager.CreateAsync(newUser, "String1234.");
+                    await userManager.AddToRoleAsync(newUser, "Admin");
+                }
+            }
             await host.RunAsync();
         }
 

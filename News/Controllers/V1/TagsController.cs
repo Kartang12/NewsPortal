@@ -12,7 +12,7 @@ using News.Services;
 
 namespace News.Controllers.V1
 {
-    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+    // [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public class TagsController : Controller
     {
         private readonly IPostService _postService;
@@ -48,7 +48,7 @@ namespace News.Controllers.V1
             var newTag = new Tag
             {
                 Name = request.TagName,
-                CreatorId = HttpContext.GetUserId(),
+                // CreatorId = HttpContext.GetUserId(),
                 CreatedOn = DateTime.UtcNow
             };
 
@@ -64,7 +64,7 @@ namespace News.Controllers.V1
         }
         
         [HttpDelete(ApiRoutes.Tags.Delete)]
-        [Authorize(Roles = "Admin")]
+        // [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Delete([FromRoute] string tagName)
         {
             var deleted = await _postService.DeleteTagAsync(tagName);

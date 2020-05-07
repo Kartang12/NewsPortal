@@ -101,7 +101,8 @@ namespace News.Services
                     continue;
 
                 await _dataContext.Tags.AddAsync(new Tag
-                    {Name = tag.TagName, CreatedOn = DateTime.UtcNow, CreatorId = post.UserId});
+                    // {Name = tag.TagName, CreatedOn = DateTime.UtcNow, CreatorId = post.UserId});
+                    {Name = tag.TagName, CreatedOn = DateTime.UtcNow});
             }
         }
 

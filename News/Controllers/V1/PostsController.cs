@@ -37,17 +37,17 @@ namespace News.Controllers.V1
         [HttpPut(ApiRoutes.Posts.Update)]
         public async Task<IActionResult> Update([FromRoute]Guid postId, [FromBody] UpdatePostRequest request)
         {
-            var userOwnsPost = await _postService.UserOwnsPostAsync(postId, HttpContext.GetUserId());
-
-            if (!userOwnsPost)
-            {
-                return BadRequest(new {error = "You do not own this post"});
-            }
+            // var userOwnsPost = await _postService.UserOwnsPostAsync(postId, HttpContext.GetUserId());
+            //
+            // if (!userOwnsPost)
+            // {
+            //     return BadRequest(new {error = "You do not own this post"});
+            // }
 
             var post = await _postService.GetPostByIdAsync(postId);
             post.Name = request.Name;
             post.Content = request.Content;
-
+            // post.Tags = request.Tag;
 
             var updated = await _postService.UpdatePostAsync(post);
 
@@ -60,12 +60,12 @@ namespace News.Controllers.V1
         [HttpDelete(ApiRoutes.Posts.Delete)]
         public async Task<IActionResult> Delete([FromRoute] Guid postId)
         {
-            var userOwnsPost = await _postService.UserOwnsPostAsync(postId, HttpContext.GetUserId());
-
-            if (!userOwnsPost)
-            {
-                return BadRequest(new {error = "You do not own this post"});
-            }
+            // var userOwnsPost = await _postService.UserOwnsPostAsync(postId, HttpContext.GetUserId());
+            //
+            // if (!userOwnsPost)
+            // {
+            //     return BadRequest(new {error = "You do not own this post"});
+            // }
             
             var deleted = await _postService.DeletePostAsync(postId);
 

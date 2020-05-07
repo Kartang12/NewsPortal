@@ -6,6 +6,7 @@ using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using News.Data;
@@ -61,7 +62,7 @@ namespace News.Services
                 };
             }
             //
-            if(role != null)
+            if(role.Length != 0 )
                 await _userManager.AddToRoleAsync(newUser, role);
 
             return await GenerateAuthenticationResultForUserAsync(newUser);
@@ -69,7 +70,7 @@ namespace News.Services
         
         public async Task<AuthenticationResult> LoginAsync(string email, string password)
         {
-            var user = await _userManager.FindByEmailAsync(email);
+            var user = await _userManager.FindByNameAsync(email);
 
             if (user == null)
             {
@@ -188,9 +189,9 @@ namespace News.Services
             
             var claims = new List<Claim>
             {
-                new Claim(JwtRegisteredClaimNames.Sub, user.Email),
+                new Claim(JwtRegisteredClaimNames.Sub, user.UserName),
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-                new Claim(JwtRegisteredClaimNames.Email, user.Email),
+                new Claim(JwtRegisteredClaimNames.Email, user.UserName),
                 new Claim("id", user.Id)
             };
 
@@ -248,8 +249,28 @@ namespace News.Services
         public async Task<IdentityResult> DeleteUser(string name)
         {
             var user = await _userManager.FindByNameAsync(name);
+            try
+            {
+                if ((await _userManager.GetRolesAsync(user)).First().ToLower() == "admin")
+                {
+                    if ((await _userManager.GetUsersInRoleAsync("Admin")).Count <= 1)
+                    {
+                        return IdentityResult.Failed(new IdentityError()
+                        {
+                            Code = "1",
+                            Description = "You can't delete the only administrator"
+                        });
+                        // result.Errors.Append(new IdentityError()
+                        // {
+                        //     Code = "1",
+                        //     Description = "You can't delete the only administrator"
+                        // });
+                        // return result;
+                    }
+                }
+            }catch(Exception ex){}
+            
             return await _userManager.DeleteAsync(user);
         }
-        
     }
 }

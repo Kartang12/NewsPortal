@@ -1,8 +1,12 @@
+using System;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using News.Contracts.V1;
 using News.Contracts.V1.Requests;
+using News.Contracts.V1.Responses;
 using News.Services;
 
 namespace News.Controllers.V1
@@ -11,11 +15,13 @@ namespace News.Controllers.V1
     {
         private readonly IIdentityService _identityService;
         private readonly UserManager<IdentityUser> _userManager;
+        private readonly RoleManager<IdentityRole> _roleManager;
 
-        public UsersController(UserManager<IdentityUser> userManager, IIdentityService identityService)
+        public UsersController(UserManager<IdentityUser> userManager, IIdentityService identityService, RoleManager<IdentityRole> roleManager)
         {
             _userManager = userManager;
             _identityService = identityService;
+            _roleManager = roleManager;
         }
             
         [HttpGet(ApiRoutes.Users.GetAll)]
@@ -27,7 +33,14 @@ namespace News.Controllers.V1
         [HttpGet(ApiRoutes.Users.Get)]
         public async Task<IActionResult> Get([FromRoute] string userName)
         {
-            return Ok(await _identityService.GetUserByName(userName));
+            var user = await _identityService.GetUserByName(userName);
+            var roles = await _userManager.GetRolesAsync(user);
+            return Ok(new UserDataResponse()
+            {
+                Name = user.UserName,
+                Role = roles.First()
+            });
+            // return Ok(await _identityService.GetUserByName(userName));
         }
         
         [HttpPost(ApiRoutes.Users.Add)]
@@ -49,7 +62,36 @@ namespace News.Controllers.V1
             if(result.Succeeded)
                 return Ok();
 
-            return BadRequest();
+            if(result.Errors.First().Code == "1")
+                return BadRequest(new {error = "You can't delete the last administrator"});
+            
+            return BadRequest(new {error = "Unable to delete user"});
         }
+
+        [HttpPut(ApiRoutes.Users.Update)]
+        public async Task<IActionResult> Update([FromRoute] string userName, [FromBody] UserUpdateRequest request)
+        {
+            var user = await _identityService.GetUserByName(userName);
+
+            user.UserName = request.Name;
+            user.Email = request.Name;
+            
+            var token = await _userManager.GeneratePasswordResetTokenAsync(user);
+            await _userManager.ResetPasswordAsync(user, token, request.Password);
+
+            if(request.Role.Length > 0 )
+            {
+                try
+                {
+                    var currentRole = (await _userManager.GetRolesAsync(user)).First();
+                    await _userManager.RemoveFromRoleAsync(user, currentRole);
+                }
+                catch (Exception e) { }
+                await _userManager.AddToRoleAsync(user, request.Role);
+            }
+
+            return Ok();
+        }
+
     }
 }
