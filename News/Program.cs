@@ -34,8 +34,14 @@ namespace News
                 
                 if (!await roleManager.RoleExistsAsync("Poster"))
                 {
-                    var adminRole = new IdentityRole("Poster");
-                    await roleManager.CreateAsync(adminRole);
+                    var posterRole = new IdentityRole("Poster");
+                    await roleManager.CreateAsync(posterRole);
+                }
+                
+                if (!await roleManager.RoleExistsAsync("User"))
+                {
+                    var userRole = new IdentityRole("User");
+                    await roleManager.CreateAsync(userRole);
                 }
 
                 var adminExists = await userManager.GetUsersInRoleAsync("Admin");

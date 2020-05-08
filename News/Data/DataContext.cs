@@ -23,7 +23,7 @@ namespace News.Data
         {
             base.OnModelCreating(builder);
 
-            builder.Entity<PostTag>().Ignore(xx => xx.Post).HasKey(x => new {x.PostId, x.TagName});
+            builder.Entity<PostTag>().HasKey(x => new {x.PostId, x.TagName});
         }
     }
 }

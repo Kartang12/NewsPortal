@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -47,7 +48,9 @@ namespace News.Controllers.V1
             var post = await _postService.GetPostByIdAsync(postId);
             post.Name = request.Name;
             post.Content = request.Content;
-            // post.Tags = request.Tag;
+            List<PostTag> tags = new List<PostTag>();
+            tags.Add(new PostTag(){PostId = postId, Tag = null, TagName = request.Tag});
+            post.Tags = tags;
 
             var updated = await _postService.UpdatePostAsync(post);
 
@@ -95,8 +98,8 @@ namespace News.Controllers.V1
                 Id = newPostId,
                 Name = postRequest.Name,
                 Content = postRequest.Content,
-                UserId = HttpContext.GetUserId(),
-                Tags = postRequest.Tags.Select(x=> new PostTag{PostId = newPostId, TagName = x}).ToList()
+                UserName = postRequest.UserName,
+                Tags = postRequest.Tags.Select(x=> new PostTag{TagName = x}).ToList()
             };
             
             await _postService.CreatePostAsync(post);
@@ -113,7 +116,15 @@ namespace News.Controllers.V1
         {
             IdentityUser user = await _identityService.GetUserByName(userName);
 
-            return Ok(await _postService.GetPostsByAuthorAsync(user.Id));
+            return Ok(await _postService.GetPostsByAuthorAsync(user.UserName));
         }
+        
+        [HttpGet(ApiRoutes.Posts.ByTag)]
+        public async Task<IActionResult> GetByTag([FromQuery] string tag)
+        {
+            return Ok(await _postService.GetPostsByTagAsync(tag));
+        }
+        
+        
     }
 }

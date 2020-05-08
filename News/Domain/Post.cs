@@ -15,7 +15,7 @@ namespace News.Domain
         
         public string Content { get; set; }
 
-        public string UserId { get; set; }
+        public string UserName { get; set; }
 
         // [ForeignKey(nameof(UserId))]
         // public IdentityUser User { get; set; }

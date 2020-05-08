@@ -20,6 +20,8 @@
 
             public const string Create = Base + "/posts";
             
+            public const string ByTag= Base + "/postsByTag/";
+
             public const string GetByAuthorName = Base + "/posters/{userName}";
         }
 
@@ -34,6 +36,11 @@
             public const string Delete = Base + "/user/{userName}";
             
             public const string Update = Base + "/user/{userName}";
+        }
+        
+        public static class Roles
+        {
+            public const string GetAll = Base + "/roles";
         }
         
         public static class Identity

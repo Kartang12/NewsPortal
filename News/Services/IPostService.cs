@@ -28,5 +28,7 @@ namespace News.Services
         Task<Tag> GetTagByNameAsync(string tagName);
         
         Task<bool> DeleteTagAsync(string tagName);
+        
+        Task<List<Post>> GetPostsByTagAsync(string tagName);
     }
 }

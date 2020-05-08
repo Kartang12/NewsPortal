@@ -31,7 +31,7 @@ namespace News.Controllers.V1
             
             var authResponse = await _identityService.RegisterAsync(request.Email, request.Password, request.Role);
 
-            if (!authResponse.Success)
+            if (!authResponse.Success || authResponse == null)
             {
                 return BadRequest(new AuthFailedResponse
                 {
@@ -62,6 +62,7 @@ namespace News.Controllers.V1
             
             return Ok(new AuthSuccessResponse
             {
+                Email = request.Email,
                 Token = authResponse.Token,
                 RefreshToken = authResponse.RefreshToken,
                 Role = authResponse.Role

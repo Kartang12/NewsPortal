@@ -22,9 +22,14 @@ namespace News.Services
             return await _dataContext.Posts.Include(x => x.Tags).ToListAsync();
         }
 
-        public async Task<List<Post>> GetPostsByAuthorAsync(string userId)
+        public async Task<List<Post>> GetPostsByAuthorAsync(string userName)
         {
-            return await _dataContext.Posts.Include(x => x.Tags).Where(x => x.UserId == userId).ToListAsync();
+            return await _dataContext.Posts.Include(x => x.Tags).Where(x => x.UserName == userName).ToListAsync();
+        }
+        
+        public async Task<List<Post>> GetPostsByTagAsync(string tag)
+        {
+            return await _dataContext.Posts.Include(x => x.Tags).Where(x => x.Tags.First().TagName == tag).ToListAsync();
         }
 
         public async Task<Post> GetPostByIdAsync(Guid postId)
@@ -118,7 +123,7 @@ namespace News.Services
             return deleted > 0;
         }
 
-        public async Task<bool> UserOwnsPostAsync(Guid postId, string userId)
+        public async Task<bool> UserOwnsPostAsync(Guid postId, string userName)
         {
             var post = await _dataContext.Posts.AsNoTracking().SingleOrDefaultAsync(x => x.Id == postId);
 
@@ -127,7 +132,7 @@ namespace News.Services
                 return false;
             }
 
-            if (post.UserId != userId)
+            if (post.UserName != userName)
             {
                 return false;
             }

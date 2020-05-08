@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
@@ -27,18 +28,44 @@ namespace News.Controllers.V1
         [HttpGet(ApiRoutes.Users.GetAll)]
         public async Task<IActionResult> GetAll()
         {
-            return Ok(_userManager.Users);
+            var rawUsers = _userManager.Users;
+            List<UserDataResponse> response = new List<UserDataResponse>();
+            foreach (IdentityUser user in rawUsers)
+            {
+                string role = null;
+                try
+                {
+                    role = (await _userManager.GetRolesAsync(user)).First();
+                }
+                catch (Exception ex)
+                {
+                }
+                response.Add(new UserDataResponse()
+                {
+                    Name = user.UserName,
+                    Role = role
+                });
+            }
+            return Ok(response);
         }
         
         [HttpGet(ApiRoutes.Users.Get)]
         public async Task<IActionResult> Get([FromRoute] string userName)
         {
             var user = await _identityService.GetUserByName(userName);
-            var roles = await _userManager.GetRolesAsync(user);
+            string role = null;
+            try
+            {
+                role = (await _userManager.GetRolesAsync(user)).First();
+            }
+            catch (Exception ex)
+            {
+            }
+
             return Ok(new UserDataResponse()
             {
                 Name = user.UserName,
-                Role = roles.First()
+                Role = role
             });
             // return Ok(await _identityService.GetUserByName(userName));
         }
@@ -76,8 +103,8 @@ namespace News.Controllers.V1
             user.UserName = request.Name;
             user.Email = request.Name;
             
-            var token = await _userManager.GeneratePasswordResetTokenAsync(user);
-            await _userManager.ResetPasswordAsync(user, token, request.Password);
+            // var token = await _userManager.GeneratePasswordResetTokenAsync(user);
+            // await _userManager.ResetPasswordAsync(user, token, request.Password);
 
             if(request.Role.Length > 0 )
             {

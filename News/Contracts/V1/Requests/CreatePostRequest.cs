@@ -8,6 +8,8 @@ namespace News.Contracts.V1.Requests
         
         public string Content { get; set; }
         
+        public string UserName{ get; set; }
+        
         public IEnumerable<string> Tags { get; set; }
     }
 }
