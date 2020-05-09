@@ -31,7 +31,7 @@ namespace News.Controllers.V1
             
             var authResponse = await _identityService.RegisterAsync(request.Email, request.Password, request.Role);
 
-            if (!authResponse.Success || authResponse == null)
+            if (!authResponse.Success)
             {
                 return BadRequest(new AuthFailedResponse
                 {

@@ -61,10 +61,21 @@ namespace News.Services
                     Errors = createdUser.Errors.Select(x => x.Description)
                 };
             }
-            //
-            if(role.Length != 0 )
-                await _userManager.AddToRoleAsync(newUser, role);
-
+            
+            
+            if(!_roleManager.Roles.Select(x=>x.Name == role).Any())
+                return new AuthenticationResult
+                {
+                    Errors = new []{"Такой роли не существует"} 
+                };
+            
+            await _userManager.AddToRoleAsync(newUser, role);
+            // else
+            //     return new AuthenticationResult
+            //     {
+            //         Errors = new []{"Такой роли не существует"} 
+            //     };
+            
             return await GenerateAuthenticationResultForUserAsync(newUser);
         }
         

@@ -20,7 +20,7 @@
 
             public const string Create = Base + "/posts";
             
-            public const string ByTag= Base + "/postsByTag/";
+            public const string ByTag= Base + "/postsByTag/{tagName}";
 
             public const string GetByAuthorName = Base + "/posters/{userName}";
         }
@@ -43,6 +43,7 @@
         public static class Roles
         {
             public const string GetAll = Base + "/roles";
+            public const string Add = Base + "/roles";
         }
         
         public static class Identity

@@ -88,7 +88,7 @@ namespace News.Services
             var tag = await _dataContext.Tags.AsNoTracking().SingleOrDefaultAsync(x => x.Name == tagName.ToLower());
 
             if (tag == null)
-                return true;
+                return false;
 
             var postTags = await _dataContext.PostTags.Where(x => x.TagName == tagName.ToLower()).ToListAsync();
 

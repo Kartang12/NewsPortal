@@ -120,9 +120,9 @@ namespace News.Controllers.V1
         }
         
         [HttpGet(ApiRoutes.Posts.ByTag)]
-        public async Task<IActionResult> GetByTag([FromQuery] string tag)
+        public async Task<IActionResult> GetByTag([FromRoute] string tagName)
         {
-            return Ok(await _postService.GetPostsByTagAsync(tag));
+            return Ok(await _postService.GetPostsByTagAsync(tagName));
         }
         
         

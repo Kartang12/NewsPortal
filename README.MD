@@ -1,3 +1,11 @@
+Для запуска в докере прописать в appsettings.json строку подключения:
+"Server=db-server;Database=News;User=sa;Password=Superadmin1234;"
+
+при запуске приложения напрямую:
+"Server=<ВАША_БД>;Database=News;Trusted_Connection=True;MultipleActiveResultSets=true"
+
+Все таблицы создадутся автоматически
+
 Для запуска в Docker выполнить в корне
 docker-compose build
 docker-compose up
