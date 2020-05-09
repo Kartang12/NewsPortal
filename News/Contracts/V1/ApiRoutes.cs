@@ -36,6 +36,8 @@
             public const string Delete = Base + "/user/{userName}";
             
             public const string Update = Base + "/user/{userName}";
+            
+            public const string Change = Base + "/userData/{userName}";
         }
         
         public static class Roles

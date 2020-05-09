@@ -98,13 +98,17 @@ namespace News.Controllers.V1
         [HttpPut(ApiRoutes.Users.Update)]
         public async Task<IActionResult> Update([FromRoute] string userName, [FromBody] UserUpdateRequest request)
         {
+            IdentityUser nameIsTaken = null;
+            if(userName != request.Name)
+                nameIsTaken = await _identityService.GetUserByName(request.Name);
+            
+            if(nameIsTaken != null)
+                return BadRequest(new {error = "This username is taken"});
+            
             var user = await _identityService.GetUserByName(userName);
-
+            
             user.UserName = request.Name;
             user.Email = request.Name;
-            
-            // var token = await _userManager.GeneratePasswordResetTokenAsync(user);
-            // await _userManager.ResetPasswordAsync(user, token, request.Password);
 
             if(request.Role.Length > 0 )
             {
@@ -116,6 +120,20 @@ namespace News.Controllers.V1
                 catch (Exception e) { }
                 await _userManager.AddToRoleAsync(user, request.Role);
             }
+
+            return Ok();
+        }
+
+        [HttpPut(ApiRoutes.Users.Change)]
+        public async Task<IActionResult> Change([FromRoute] string userName, [FromBody] UserSelfUpdateRequest request)
+        {
+            var user = await _identityService.GetUserByName(userName);
+
+            user.UserName = request.Name;
+            user.Email = request.Name;
+            
+            var token = await _userManager.GeneratePasswordResetTokenAsync(user);
+            await _userManager.ResetPasswordAsync(user, token, request.Password);
 
             return Ok();
         }

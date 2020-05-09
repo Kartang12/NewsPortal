@@ -29,6 +29,8 @@ namespace News.Services
         
         public async Task<List<Post>> GetPostsByTagAsync(string tag)
         {
+            if (tag == "all")
+                return await GetPostsAsync();
             return await _dataContext.Posts.Include(x => x.Tags).Where(x => x.Tags.First().TagName == tag).ToListAsync();
         }
 
